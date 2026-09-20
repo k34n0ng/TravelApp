@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TravelApp.Services;
 
 namespace TravelApp
 {
@@ -19,6 +20,9 @@ namespace TravelApp
     		builder.Logging.AddDebug();
 #endif
 
+			// Register map abstraction services
+			builder.Services.AddSingleton<IMapProviderRegistry, MapProviderRegistry>();
+			builder.Services.AddSingleton<IMapProviderResolver, MapProviderResolver>();
             return builder.Build();
         }
     }
