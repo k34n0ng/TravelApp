@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TravelApp.Controls;
 using TravelApp.Services;
 
 namespace TravelApp
@@ -14,10 +15,18 @@ namespace TravelApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                })
+                .ConfigureMauiHandlers(handlers =>
+                {
+#if ANDROID
+                    handlers.AddHandler<GoogleMapView, Platforms.Android.Handlers.GoogleMapViewHandler>();
+#elif IOS
+                    handlers.AddHandler<GoogleMapView, Platforms.iOS.Handlers.GoogleMapViewHandler>();
+#endif
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
 			// Register map abstraction services
