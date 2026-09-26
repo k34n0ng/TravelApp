@@ -19,6 +19,13 @@ namespace TravelApp.Controls
                 typeof(GoogleMapView),
                 10.0);
 
+        public static readonly BindableProperty SelectedPlaceProperty =
+            BindableProperty.Create(
+                nameof(SelectedPlace),
+                typeof(MapPlace),
+                typeof(GoogleMapView),
+                default(MapPlace));
+
         public GeoCoordinate? InitialCenter
         {
             get => (GeoCoordinate?)GetValue(InitialCenterProperty);
@@ -29,6 +36,12 @@ namespace TravelApp.Controls
         {
             get => (double)GetValue(InitialZoomProperty);
             set => SetValue(InitialZoomProperty, value);
+        }
+
+        public MapPlace? SelectedPlace
+        {
+            get => (MapPlace?)GetValue(SelectedPlaceProperty);
+            set => SetValue(SelectedPlaceProperty, value);
         }
     }
 }
