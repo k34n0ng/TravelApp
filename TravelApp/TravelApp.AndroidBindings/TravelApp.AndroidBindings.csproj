@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AndroidMavenLibrary
+        Include="com.naver.maps:map-sdk"
+        Version="3.24.0"
+        Repository="https://repository.map.naver.com/archive/maven" />
+  </ItemGroup>
+</Project>

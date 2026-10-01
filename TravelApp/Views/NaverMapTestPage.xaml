@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TravelApp.Controls"
+             xmlns:models="clr-namespace:TravelApp.Models"
+             x:Class="TravelApp.Views.NaverMapTestPage"
+             Title="NAVER Map Test">
+
+    <Grid>
+        <controls:NaverMapView
+            x:Name="NaverMapControl"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            InitialZoom="15">
+            <controls:NaverMapView.InitialCenter>
+                <models:GeoCoordinate>
+                    <x:Arguments>
+                        <x:Double>37.5796</x:Double>
+                        <x:Double>126.9770</x:Double>
+                    </x:Arguments>
+                </models:GeoCoordinate>
+            </controls:NaverMapView.InitialCenter>
+        </controls:NaverMapView>
+
+        <!-- Simple status bar overlay at the top -->
+        <VerticalStackLayout
+            Margin="16,16,16,0"
+            Padding="12"
+            Spacing="4"
+            VerticalOptions="Start"
+            BackgroundColor="#F0FFFFFF"
+            MaximumWidthRequest="500">
+            <Label
+                Text="NAVER Map Test"
+                FontAttributes="Bold"
+                FontSize="18" />
+            <Label
+                Text="Gyeongbokgung Palace (경복궁)"
+                FontSize="14" />
+            <Label
+                Text="37.5796°N, 126.9770°E (WGS84)"
+                FontSize="12"
+                TextColor="Gray" />
+            <Button
+                x:Name="AddMarkerButton"
+                Margin="0,4,0,0"
+                Text="Add Marker"
+                Clicked="OnAddMarkerClicked" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

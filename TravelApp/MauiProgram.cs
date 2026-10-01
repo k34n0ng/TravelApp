@@ -20,6 +20,7 @@ namespace TravelApp
                 {
 #if ANDROID
                     handlers.AddHandler<GoogleMapView, Platforms.Android.Handlers.GoogleMapViewHandler>();
+                    handlers.AddHandler<NaverMapView, Platforms.Android.Handlers.NaverMapViewHandler>();
 #elif IOS
                     handlers.AddHandler<GoogleMapView, Platforms.iOS.Handlers.GoogleMapViewHandler>();
 #endif
