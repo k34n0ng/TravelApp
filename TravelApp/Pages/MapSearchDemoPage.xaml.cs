@@ -6,16 +6,16 @@ namespace TravelApp.Pages;
 
 public partial class MapSearchDemoPage : ContentPage
 {
-    private readonly IMapProviderResolver _resolver;
+    private readonly IPlaceSearchService _placeSearchService;
 
     public MapSearchDemoPage()
     {
         InitializeComponent();
 
-        _resolver = Application.Current?.Handler?.MauiContext?.Services
-            .GetService<IMapProviderResolver>()
+        _placeSearchService = Application.Current?.Handler?.MauiContext?.Services
+            .GetService<IPlaceSearchService>()
             ?? throw new InvalidOperationException(
-                "IMapProviderResolver not registered.");
+                "IPlaceSearchService not registered.");
     }
 
     private async void OnSearchClicked(object sender, EventArgs e)
@@ -39,9 +39,7 @@ public partial class MapSearchDemoPage : ContentPage
                 CountryCode = countryCode
             };
 
-            var provider = _resolver.Resolve(request.CountryCode);
-
-            var results = await provider.SearchAsync(
+            var results = await _placeSearchService.SearchAsync(
                 request,
                 CancellationToken.None);
 
@@ -55,7 +53,7 @@ public partial class MapSearchDemoPage : ContentPage
             MapHost.Place = results[0];
 
             ResultLabel.Text =
-                $"Found: {results[0].Name} ({provider.ProviderType})";
+                $"Found: {results[0].Name} ({results[0].Provider})";
         }
         catch (Exception ex)
         {

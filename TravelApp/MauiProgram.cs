@@ -35,9 +35,10 @@ namespace TravelApp
             builder.Services.AddSingleton<IMapProvider, NaverMapProvider>();
 			builder.Services.AddSingleton<IMapProviderRegistry, MapProviderRegistry>();
 			builder.Services.AddSingleton<IMapProviderResolver, MapProviderResolver>();
+            builder.Services.AddSingleton<IPlaceSearchService, PlaceSearchService>();
 
-			// Register Pages
-			builder.Services.AddTransient<MainPage>();
+            // Register Pages
+            builder.Services.AddTransient<MainPage>();
 
             return builder.Build();
         }
