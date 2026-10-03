@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="TravelApp/TravelApp.csproj" />
+  <Project Path="TravelApp.NaverMaps.Android/TravelApp.NaverMaps.Android.csproj" />
+  <Project Path="TravelApp/TravelApp.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>

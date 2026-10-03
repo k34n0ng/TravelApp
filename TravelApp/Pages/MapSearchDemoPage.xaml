@@ -1,0 +1,35 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TravelApp.Controls"
+             x:Class="TravelApp.Pages.MapSearchDemoPage">
+
+    <VerticalStackLayout Padding="16">
+
+        <Entry x:Name="QueryEntry"
+               Placeholder="Query"
+               Margin="0,0,0,8" />
+
+        <Picker x:Name="CountryPicker"
+                Title="Country Code">
+            <Picker.Items>
+                <x:String>KR</x:String>
+                <x:String>SG</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <Button x:Name="SearchButton"
+                Text="Search"
+                Clicked="OnSearchClicked"
+                Margin="0,8" />
+
+        <Label x:Name="ResultLabel"
+               Text=""
+               Margin="0,8" />
+
+        <controls:MapHostView x:Name="MapHost"
+                              HeightRequest="400"
+                              HorizontalOptions="Fill" />
+
+    </VerticalStackLayout>
+
+</ContentPage>

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TravelApp"
     xmlns:views="clr-namespace:TravelApp.Views"
+    xmlns:pages="clr-namespace:TravelApp.Pages"
     Title="TravelApp">
 
     <!-- Existing Google Maps page - KEEP -->
@@ -18,5 +19,12 @@
         Title="NAVER Map Test"
         ContentTemplate="{DataTemplate views:NaverMapTestPage}"
         Route="NaverMapTestPage" />
+
+    <!-- TEMPORARY TEST ROUTE -->
+    <ShellContent
+        Title="Map Search Demo"
+        ContentTemplate="{DataTemplate pages:MapSearchDemoPage}"
+        Route="MapSearchDemoPage"
+        IsVisible="True" />
 
 </Shell>

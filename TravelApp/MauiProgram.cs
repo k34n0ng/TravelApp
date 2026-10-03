@@ -31,7 +31,8 @@ namespace TravelApp
 #endif
 
 			// Register map abstraction services
-			builder.Services.AddSingleton<IMapProvider, GoogleMapProvider>();
+            builder.Services.AddSingleton<IMapProvider, GoogleMapProvider>();
+            builder.Services.AddSingleton<IMapProvider, NaverMapProvider>();
 			builder.Services.AddSingleton<IMapProviderRegistry, MapProviderRegistry>();
 			builder.Services.AddSingleton<IMapProviderResolver, MapProviderResolver>();
 
