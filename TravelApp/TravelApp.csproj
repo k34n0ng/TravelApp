@@ -85,12 +85,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Pages\MapSearchDemoPage.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Remove="Pages\MapSearchDemoPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Models\" />
+	  <Folder Include="Pages\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Views\" />
 	  <Folder Include="ViewModels\" />

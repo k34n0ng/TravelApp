@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+using TravelApp.ViewModels;
+using TravelApp.Views;
+using Microsoft.Extensions.Logging;
 using TravelApp.Controls;
 using TravelApp.Services;
 
@@ -9,6 +11,7 @@ namespace TravelApp
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -30,15 +33,20 @@ namespace TravelApp
             builder.Logging.AddDebug();
 #endif
 
-			// Register map abstraction services
+            // Register map abstraction services
             builder.Services.AddSingleton<IMapProvider, GoogleMapProvider>();
             builder.Services.AddSingleton<IMapProvider, NaverMapProvider>();
-			builder.Services.AddSingleton<IMapProviderRegistry, MapProviderRegistry>();
-			builder.Services.AddSingleton<IMapProviderResolver, MapProviderResolver>();
+            builder.Services.AddSingleton<IMapProviderRegistry, MapProviderRegistry>();
+            builder.Services.AddSingleton<IMapProviderResolver, MapProviderResolver>();
             builder.Services.AddSingleton<IPlaceSearchService, PlaceSearchService>();
+            builder.Services.AddSingleton<IPlaceDestinationResolver, PlaceDestinationResolver>();
+
+            // Register ViewModels
+	    builder.Services.AddTransient<MapSearchDemoViewModel>();
 
             // Register Pages
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<MapSearchDemoPage>();
 
             return builder.Build();
         }
