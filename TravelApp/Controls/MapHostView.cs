@@ -50,20 +50,12 @@ public class MapHostView : ContentView
 
         try
         {
-            var provider = _resolver.Resolve(place.CountryCode);
-
-            if (provider == null)
-            {
-                throw new InvalidOperationException(
-                    "No map provider resolved.");
-            }
-
-            View mapControl = provider.ProviderType switch
+            View mapControl = place.Provider switch
             {
                 MapProviderType.Google => new GoogleMapView(),
                 MapProviderType.Naver => new NaverMapView(),
                 _ => throw new NotSupportedException(
-                    $"Provider not supported: {provider.ProviderType}")
+                    $"Provider not supported by MapHostView: {place.Provider}")
             };
 
             if (mapControl is GoogleMapView googleMap)
@@ -79,8 +71,11 @@ public class MapHostView : ContentView
 
             Content = mapControl;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine(
+                $"MapHostView failed to create map for provider '{place.Provider}': {ex}");
+
             Content = null;
         }
     }
