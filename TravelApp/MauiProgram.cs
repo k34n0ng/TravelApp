@@ -41,12 +41,18 @@ namespace TravelApp
             builder.Services.AddSingleton<IPlaceSearchService, PlaceSearchService>();
             builder.Services.AddSingleton<IPlaceDestinationResolver, PlaceDestinationResolver>();
 
+            // Register live destination search (Google Places, existing Google API key)
+            builder.Services.AddSingleton<IGoogleApiCredentialProvider, GoogleApiCredentialProvider>();
+            builder.Services.AddSingleton<IDestinationSearchService, GooglePlacesDestinationSearchService>();
+
             // Register ViewModels
 	    builder.Services.AddTransient<MapSearchDemoViewModel>();
+            builder.Services.AddTransient<LiveMapSearchViewModel>();
 
             // Register Pages
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<MapSearchDemoPage>();
+            builder.Services.AddTransient<LiveMapSearchPage>();
 
             return builder.Build();
         }

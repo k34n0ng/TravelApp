@@ -15,6 +15,12 @@ namespace TravelApp.Services
 
         public IMapProvider Resolve(string? countryCode)
         {
+            // Retrieve provider from registry
+            return _registry.Get(ResolveProviderType(countryCode));
+        }
+
+        public MapProviderType ResolveProviderType(string? countryCode)
+        {
             // Normalize country code
             var normalized = countryCode?.Trim().ToUpperInvariant();
 
@@ -33,8 +39,7 @@ namespace TravelApp.Services
                     break;
             }
 
-            // Retrieve provider from registry
-            return _registry.Get(providerType);
+            return providerType;
         }
     }
 }
