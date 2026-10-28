@@ -26,4 +26,10 @@
         Route="MapSearchDemoPage"
         IsVisible="True" />
 
+    <!-- Step 13.7 live destination search -->
+    <ShellContent
+        Title="Live Map Search"
+        ContentTemplate="{DataTemplate views:LiveMapSearchPage}"
+        Route="LiveMapSearchPage" />
+
 </Shell>

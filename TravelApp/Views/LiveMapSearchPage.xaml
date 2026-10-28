@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TravelApp.Views.LiveMapSearchPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TravelApp.Controls"
+    xmlns:models="clr-namespace:TravelApp.Models"
+    xmlns:viewmodels="clr-namespace:TravelApp.ViewModels"
+    x:DataType="viewmodels:LiveMapSearchViewModel"
+    Title="Live Map Search">
+
+    <ContentPage.Resources>
+        <!-- Destination zoom for every map on this page, including controls created by MapHostView. -->
+        <Style TargetType="controls:GoogleMapView">
+            <Setter Property="InitialZoom" Value="15" />
+        </Style>
+        <Style TargetType="controls:NaverMapView">
+            <Setter Property="InitialZoom" Value="15" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid Padding="20" RowSpacing="8" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <Entry
+                Grid.Column="0"
+                Placeholder="Search a destination"
+                Text="{Binding Query}"
+                ReturnCommand="{Binding SearchCommand}" />
+            <Button
+                Grid.Column="1"
+                Text="Search"
+                Command="{Binding SearchCommand}" />
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="8">
+            <ActivityIndicator
+                Grid.Column="0"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                HeightRequest="20"
+                WidthRequest="20" />
+            <Label
+                Grid.Column="1"
+                Text="{Binding Status}"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="2">
+            <Label Text="{Binding CountryText}" />
+            <Label Text="{Binding ProviderText}" />
+            <Label Text="{Binding RendererText}" />
+        </VerticalStackLayout>
+
+        <CollectionView
+            Grid.Row="3"
+            MaximumHeightRequest="150"
+            ItemsSource="{Binding Results}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedResult, Mode=TwoWay}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:MapPlace">
+                    <VerticalStackLayout Padding="0,4">
+                        <Label Text="{Binding Name}" FontAttributes="Bold" />
+                        <Label Text="{Binding Address}" FontSize="12" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="4" Spacing="8">
+            <Button Text="Google" Command="{Binding ShowGoogleCommand}" />
+            <Button Text="NAVER" Command="{Binding ShowNaverCommand}" />
+        </HorizontalStackLayout>
+
+        <!-- Fallback Google map: shown on open and on no results/errors (no pin), and for unsupported providers (destination pinned). -->
+        <controls:GoogleMapView
+            Grid.Row="5"
+            InitialCenter="{Binding FallbackCenter}"
+            SelectedPlace="{Binding FallbackPlace}"
+            IsVisible="{Binding ShowFallbackMap}" />
+
+        <controls:MapHostView
+            Grid.Row="5"
+            Place="{Binding DisplayPlace}"
+            IsVisible="{Binding HasRenderedPlace}" />
+
+    </Grid>
+</ContentPage>

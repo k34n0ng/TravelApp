@@ -239,7 +239,8 @@ already-approved design.
     assume OmniRoute is an application runtime dependency unless an
     explicit application feature requires it.
 -   The configuration and credential mechanism for Google Maps, AMap,
-    Naver Maps, and future backend services is not yet finalized.
+    Naver Maps, and future backend services is not yet finalized, except
+    for the Android live-search key reuse recorded in section 13.1.
 -   Do not invent a secrets/configuration mechanism without human
     approval.
 -   When implementing credentials, consider platform/provider
@@ -377,8 +378,10 @@ The following decisions are intentionally open and must not be assumed:
 -   provider-selection and runtime/build-time strategy
 -   MVVM toolkit versus framework `INotifyPropertyChanged`
     implementation
--   HTTP/REST client strategy
--   secrets and configuration-loading mechanism
+-   HTTP/REST client strategy beyond the current per-service
+    `HttpClient` (see section 13.1)
+-   secrets and configuration-loading mechanism, other than the Android
+    live-search key reuse in section 13.1
 -   release logging strategy
 -   test framework and test project
 -   CI/CD pipeline
@@ -391,6 +394,38 @@ The following decisions are intentionally open and must not be assumed:
 When one of these decisions becomes necessary, stop before implementing
 the irreversible part and present the options and recommendation to the
 human.
+
+### 13.1 Decisions Finalized in Step 13.7
+
+The following decisions were approved and implemented in Step 13.7
+(live map search). They apply to the live destination search feature
+and do not settle the other open items above.
+
+-   Live destination search uses Google Places API (New) Text Search
+    (`places:searchText`), implemented by
+    `GooglePlacesDestinationSearchService` behind the provider-agnostic
+    `IDestinationSearchService`.
+-   HTTP client: each service currently owns its own `HttpClient`
+    instance. This records the existing implementation, not a
+    project-wide HTTP-client architecture.
+-   Credentials: Android live search reuses the existing
+    `com.google.android.geo.API_KEY` manifest meta-data entry, read
+    through `IGoogleApiCredentialProvider`. Its value comes from
+    `GoogleMaps.Local.props`, which must remain local, ignored, and
+    untracked. Never write the key into source, documentation, or logs.
+-   Provider selection (`MapProviderResolver`): mainland China (`CN`) →
+    AMap identity; South Korea (`KR`) → NAVER Maps; all other locations
+    → Google Maps.
+-   China fallback: AMap rendering is not implemented in `MapHostView`.
+    The live-search page preserves the AMap identity, shows a pinned
+    Google fallback map, and displays the status
+    `Provider not supported by MapHostView`.
+-   Current limitations: live-search credential retrieval is
+    Android-only. iOS live search and NAVER iOS rendering are not
+    implemented.
+-   Validation: the Step 13.7 Android build succeeded and all six
+    Step 13.7 Android device acceptance tests passed. iOS was not built
+    or tested for Step 13.7.
 
 ## 14. Current Baseline
 
@@ -408,4 +443,5 @@ At the time this document was created:
     selected
 
 Treat this baseline as the starting point. Update this document when an
-architectural decision is deliberately made and approved.
+architectural decision is deliberately made and approved. Decisions
+recorded in section 13.1 supersede the corresponding baseline items.
