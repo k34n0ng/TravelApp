@@ -203,25 +203,76 @@ Platform-specific code belongs under `Platforms/Android/`,
 The application is expected to support Google Maps, AMap, and Naver
 Maps.
 
-The concrete map architecture has not yet been decided.
+The complete map architecture has not yet been decided. Section 13.1
+records the map decisions approved in Step 13.7. This section
+describes the current implementation status and the guardrails that
+apply to all further map work.
 
-Until a design is approved:
+### 7.1 Current Implementation Status
 
--   Do not add Google, AMap, or Naver SDK packages/bindings.
--   Do not choose a specific map control or SDK architecture
-    unilaterally.
+Existing code documents current state only. It is not, by itself,
+approval of the wider map design.
+
+Implemented:
+
+-   Provider abstraction: `IMapProvider`, `IMapProviderRegistry`,
+    `IMapProviderResolver`, and the provider-agnostic models
+    `MapPlace`, `GeoCoordinate`, `MapSearchRequest`, and
+    `MapProviderType` (`Google`, `AMap`, `Naver`). The final shape of
+    this abstraction is not yet approved (see section 13).
+-   Provider selection: `MapProviderResolver` applies the country
+    policy recorded in section 13.1.
+-   Rendering: `MapHostView` renders `GoogleMapView` and
+    `NaverMapView` only.
+-   Live destination search: Google Places Text Search, as recorded
+    in section 13.1 (Android only).
+
+Partially implemented:
+
+-   `GoogleMapProvider` and `NaverMapProvider` are the only registered
+    `IMapProvider` implementations. Both return deterministic
+    fixtures and do not call live provider APIs.
+
+Present in the repository without an explicit architectural approval
+record:
+
+-   Google Maps SDKs: `Xamarin.GooglePlayServices.Maps` (Android) and
+    `AdamE.Google.iOS.Maps` (iOS), referenced from `TravelApp.csproj`.
+-   NAVER Maps Android SDK: the root-level
+    `TravelApp.NaverMaps.Android` binding project
+    (`com.naver.maps:map-sdk` 3.24.0 via `AndroidMavenLibrary`).
+
+Not implemented:
+
+-   any AMap SDK, binding, `IMapProvider`, or map rendering. Because
+    no AMap `IMapProvider` is registered,
+    `IMapProviderResolver.Resolve("CN")` currently throws.
+-   NAVER iOS SDK/binding and NAVER iOS rendering (an iOS
+    `NaverMapViewHandler` source file exists but is not registered)
+-   live (non-fixture) NAVER or AMap search
+-   iOS live destination search
+
+Validation: Android only. iOS has not been built or validated.
+
+### 7.2 Guardrails
+
+-   Do not add, replace, upgrade, or remove any map SDK package or
+    binding without approval (see section 9). This includes adding an
+    AMap SDK or a NAVER iOS SDK, and changing the existing Google or
+    NAVER packages/bindings.
+-   Do not choose a new map control or SDK architecture unilaterally.
 -   Do not put provider-specific SDK types into ViewModels or shared
     application models.
--   The eventual design should provide a provider abstraction so
-    application code can work with provider-agnostic models and
-    operations.
--   Provider-specific implementations should be isolated behind that
-    abstraction.
--   Provider selection should be configurable or otherwise swappable
+-   Keep provider-specific implementations behind the provider
+    abstraction. Extend it through an approved change rather than
+    bypassing it.
+-   Keep provider selection configurable or otherwise swappable
     rather than hard-coded throughout the application.
--   Before implementing the map subsystem, present the proposed
-    interface, provider-selection mechanism, SDK/binding strategy, and
-    platform approach for human approval.
+-   Before changing the abstraction's shape, implementing AMap,
+    implementing NAVER on iOS, or replacing fixture providers with
+    live APIs, present the proposed interface changes, SDK/binding
+    strategy, credential handling, and platform approach for human
+    approval.
 
 Do not treat an example interface name such as `IMapService` as an
 already-approved design.
@@ -375,7 +426,8 @@ The following decisions are intentionally open and must not be assumed:
 -   concrete Google Maps / AMap / Naver Maps architecture
 -   map SDK/control and native-binding strategy
 -   exact map abstraction/interface shape
--   provider-selection and runtime/build-time strategy
+-   runtime/build-time provider-selection strategy (the country policy
+    itself is recorded in section 13.1)
 -   MVVM toolkit versus framework `INotifyPropertyChanged`
     implementation
 -   HTTP/REST client strategy beyond the current per-service
@@ -429,7 +481,7 @@ and do not settle the other open items above.
 
 ## 14. Current Baseline
 
-At the time this document was created:
+At the time this document was created (commit `f5f3a05`):
 
 -   the project is a .NET 10 MAUI template-based application
 -   Android and iOS are the primary targets
@@ -445,3 +497,21 @@ At the time this document was created:
 Treat this baseline as the starting point. Update this document when an
 architectural decision is deliberately made and approved. Decisions
 recorded in section 13.1 supersede the corresponding baseline items.
+
+The historical list above is kept unchanged. The following items no
+longer describe the repository:
+
+-   "no application services are registered in `MauiProgram.cs`":
+    map abstraction, place search, and live destination search
+    services, ViewModels, and pages are now registered there. This is
+    a factual update, not an architectural decision.
+-   "no map SDK/provider package has been selected": Google Maps SDKs
+    (Android and iOS) and a NAVER Maps Android binding are present in
+    the repository without an explicit approval record (see section
+    7.1). Google Places Text Search for live search is a recorded
+    decision (section 13.1). No AMap or NAVER iOS SDK has been
+    selected.
+-   "no application-specific secrets/configuration mechanism has been
+    selected": partially superseded. The Android live-search key
+    reuse through `GoogleMaps.Local.props` is recorded in section
+    13.1. No general mechanism has been selected.
